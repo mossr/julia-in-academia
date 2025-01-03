@@ -1,0 +1,9 @@
+[deps]
+SignalTemporalLogic = "a79a9ddd-d50e-4d85-a979-5d85760e62a0"
+Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
+
+[compat]
+Weave = "=0.9.4"
+
+[sources]
+SignalTemporalLogic = {path = "/Users/mossr/.julia/dev/SignalTemporalLogic"}

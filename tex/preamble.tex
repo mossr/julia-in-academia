@@ -1,6 +1,16 @@
+\newcommand*{\INVERTED}{} % Comment out for light-mode
+\newcommand*{\CENTERTITLE}{} % Comment out for left-aligned title
+
 \usepackage{fontspec}
 \usepackage{sourcesanspro}
 \usepackage[T1]{fontenc}
+
+\usepackage[usefamily={jl,julia,juliacon}]{pythontex}
+\setpythontexpygopt{style=algfordm}
+
+% NOTE: You will need to pull this code via the GitHub repo and compile with latexmk
+% to get new pythontex syntax highlighting working properly.
+\input{output/pythontex-files-main/main.pytxpyg}
 
 % TODO: albatian
 \usefonttheme{serif}
@@ -23,14 +33,11 @@
 \usepackage{multirow}
 \usepackage{longtable,tabularx,booktabs}
 \usepackage[flushleft]{threeparttable}
-\usepackage{preamble/vector} % local
+\usepackage{vector} % local
 \usepackage{varwidth}
 \usepackage{fancyvrb}
 \usepackage{tcolorbox}
 \usepackage{ifthen}
-
-% \newcommand*{\INVERTED}{} % Comment out for light-mode
-\newcommand*{\CENTERTITLE}{} % Comment out for left-aligned title
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Unicode settings
@@ -44,7 +51,8 @@
 % Reference (biber) settings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[style=verbose,backend=biber]{biblatex}
-\addbibresource{preamble/main.bib}
+% \addbibresource{preamble/main.bib}
+\addbibresource{\jobname.bib}
 % \setbeamerfont{footnote}{size=\tiny}
 \setbeamerfont{footnote}{size=\fontsize{4}{5}\selectfont}
 \setbeamertemplate{bibliography item}{}% Remove reference icon.
@@ -111,7 +119,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \usepackage[pgfplots]{../juliaplots.sty/juliaplots}
 \usepackage{pgfplots}
-% \setpythontexpygopt{style=algforopt}
 \pgfplotsset{compat=newest}
 \pgfplotsset{every axis legend/.append style={legend cell align=left, font=\footnotesize, draw=none, fill=none}}
 \pgfplotsset{every axis/.append style={axis background/.style={fill=secondarycolor}}}
@@ -365,5 +372,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Auxiliary files
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{preamble/title}
-\input{preamble/arrows_and_braces}
+\input{title}
+\input{arrows_and_braces}
