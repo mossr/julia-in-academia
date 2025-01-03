@@ -1,0 +1,33 @@
+\documentclass[aspectratio=169]{beamer}
+
+\setbeamertemplate{title page}[default][left] % left-align title page (commend out for centered title page)
+\beamertemplatenavigationsymbolsempty % remove navigation symbols
+
+\input{preamble/preamble}
+
+\title{Title of Presentation}
+\subtitle{This is a more detailed subtitle}
+\author{Robert Moss}
+\institute{Stanford University}
+\email{mossr@cs.stanford.edu}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \maketitle
+\end{frame}
+
+% Include individual or combined slides.
+\include{slides/example}
+\include{slides/example-tikz}
+\include{slides/example-algorithm}
+\include{slides/example-definition}
+\include{slides/example-table}
+\include{slides/example-bullets}
+
+\begin{frame}{References}
+    \printbibliography
+\end{frame}
+
+\end{document}
