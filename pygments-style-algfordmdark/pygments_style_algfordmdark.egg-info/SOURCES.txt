@@ -1,0 +1,11 @@
+LICENSE
+README.md
+setup.py
+pygments_style_algfordmdark/__init__.py
+pygments_style_algfordmdark/algfordmdark.py
+pygments_style_algfordmdark.egg-info/PKG-INFO
+pygments_style_algfordmdark.egg-info/SOURCES.txt
+pygments_style_algfordmdark.egg-info/dependency_links.txt
+pygments_style_algfordmdark.egg-info/entry_points.txt
+pygments_style_algfordmdark.egg-info/requires.txt
+pygments_style_algfordmdark.egg-info/top_level.txt

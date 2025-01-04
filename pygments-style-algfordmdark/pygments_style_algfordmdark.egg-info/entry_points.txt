@@ -1,0 +1,2 @@
+[pygments.styles]
+algfordmdark = pygments_style_algfordmdark:AlgForDMStyle

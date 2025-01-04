@@ -17,7 +17,7 @@ $MSWin_back_slash = 0;
 $clean_ext .= " pythontex-files-%R/* pythontex-files-%R";
 push @generated_exts, 'pytxcode';
 
-$pythontex = 'pythontex %O %S';
+$pythontex = 'pythontex --interpreter python:/usr/bin/python3 %O %S';
 $extra_rule_spec{'pythontex'}  = [ 'internal', '', 'mypythontex', "%Y%R.pytxcode",  "%Ypythontex-files-%R/%R.pytxmcr",    "%R", 1 ];
 
 sub mypythontex {

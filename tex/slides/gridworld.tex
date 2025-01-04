@@ -1,0 +1,54 @@
+\def\gwone{\smallgrayunderbrace{\lozenge G(s_t)}{\substack{\text{reaches}\\\text{goal}}}}
+\def\gwtwo{\, \wedge \, \smallgrayunderbrace{\neg C(s_t) \until G(s_t)}{\substack{\text{reach checkpoint}\\\text{before goal}}}}
+\def\gwthree{\, \wedge \, \smallgrayunderbrace{\square \neg F(s_t)}{\substack{\text{always avoid}\\\text{obstacles}}}}
+% Note, [fragile] is needed when using juliaconsole
+\begin{frame}[fragile,t]{Grid World}
+
+\begin{columns}
+\begin{column}{0.6\textwidth}
+    \begin{align*}
+        \only<2->{F(s_t) &: \text{the state $s$ at time $t$ contains an obstacle} \\}
+        \only<3->{G(s_t) &: \text{the state $s$ at time $t$ is the goal} \\}
+        \only<4->{C(s_t) &: \text{the state $s$ at time $t$ is the checkpoint}}
+    \end{align*}
+    \begin{equation*}
+      \only<5>{\psi = \gwone\phantom{\gwtwo}\phantom{\gwthree}}
+      \only<6>{\psi = \gwone\gwtwo\phantom{\gwthree}}
+      \only<7->{\psi = \gwone\gwtwo\gwthree}
+    \end{equation*}
+\end{column}
+\begin{column}{0.4\textwidth}
+    \begin{jlcode}
+        p = let
+            env = GridWorld(tprob=0.80)
+            τ_true = [(; s = [1, 1]), (; s = [2, 1]), (; s = [3, 1]), (; s = [4, 1]), (; s = [5, 1]), (; s = [6, 1]), (; s = [7, 1]), (; s = [8, 1]), (; s = [8, 2]), (; s = [8, 3]), (; s = [8, 4]), (; s = [8, 5]), (; s = [8, 6]), (; s = [8, 7]), (; s = [8, 8]), (; s = [7, 8])]
+    
+            ax = plot_grid_world(env; checkpoint_cells=[[8, 3]])
+            plot_gw_trajectory!(ax, τ_true, color="pastelGreen!50!white", linewidth="1pt", include_marks=true, mark_color="pastelGreen!50!white")
+            ax.width = "4.5cm"
+            ax.height = "4.5cm"
+            # ax.title = L"\psi = \texttt{true}"
+            ax
+        end
+        plot(p)
+        \end{jlcode}
+        \begin{center}
+            \plot{fig/ltl_checkpoint}
+        \end{center}
+    \end{column}
+\end{columns}
+
+\pause\pause\pause\pause\pause\pause\pause
+\vspace{0.8\baselineskip}
+\begin{small}
+\begin{algorithmblock}
+\begin{juliaverbatim}
+F = @formula sₜ -> sₜ == [5, 5]
+G = @formula sₜ -> sₜ == [7, 8]
+C = @formula sₜ -> sₜ == [8, 3]
+ψ = LTLSpecification(@formula ◊(G) ∧ 𝒰(¬G, C) ∧ □(¬F))
+\end{juliaverbatim}
+\end{algorithmblock}
+\end{small}
+
+\end{frame}

@@ -1,0 +1,35 @@
+% Note, [fragile] is needed when using juliaconsole
+\begin{frame}[fragile,t]{Inverted Pendulum}
+
+\begin{table} % problem specs
+\begin{adjustbox}{width=\columnwidth}
+\begin{tabular}[t]{cll}
+    \toprule
+    System & Property & Implementation \\
+    \midrule
+    \begin{tikzpicture}[baseline=(current bounding box.center)]
+        \fill[pastelGreen!30] (0.707, 0.707) arc (45:135:1) -- cycle;
+        \fill[pastelRed!30] (-0.707, 0.707) arc (135:405:1) -- cycle;
+        \filldraw[fill=pastelGreen!30, draw=pastelGreen!30] (0, 0) -- (0.707, 0.707) -- (-0.707, 0.707) -- cycle;
+        \draw[darkgray, dashed] (0, 0) -- (0, 1.1);
+        \draw[darkgray, line width = 1.5pt] (0, 0) -- (0.42, 0.906);
+        \draw[darkgray] (0, 0.5) arc (90:65:0.5);
+        \draw[pastelRed, thick, dashed] (0, 0) -- (0.78, 0.78);
+        \draw[pastelRed, thick, dashed] (0, 0) -- (-0.78, 0.78);
+        \fill[darkgray] (0, 0) circle (0.1);
+    
+        \node[darkgray] at (0.15, 0.7) {\footnotesize $\theta$};
+        \node[white] at (1.1, 1.0) {\footnotesize $\pi/4$};
+        \node[white] at (-1.1, 1.0) {\footnotesize $-\pi/4$};
+        \node at (0, 1.6) {Inverted Pendulum};
+    \end{tikzpicture} \vspace{0.4cm} & \begin{tabular}{@{}l@{}} \textit{``Keep the pendulum balanced''} \\ $B(s_t)$: $|\theta_t| \le \pi/4$ \\ $\psi = \square B(s_t)$\end{tabular} & 
+    \begin{tabular}{@{}l@{}}
+    \small \jlv{B = @formula s->abs(s[1])≤π/4} \\
+    \small \jlv{ψ = @formula □(B)}
+    \end{tabular} \\
+    \bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\end{frame}

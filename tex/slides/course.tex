@@ -1,0 +1,37 @@
+% Note, [fragile] is needed when using juliaconsole
+\begin{frame}[fragile,t]{Use in Projects}
+
+Wrappers are provided in the textbook/projects:
+
+\pause
+\phantom{}
+
+\textit{Linear temporal logic (LTL)}
+\begin{footnotesize}
+\begin{algorithmblock}
+\begin{juliaverbatim}
+struct LTLSpecification <: Specification
+	formula # formula specified using SignalTemporalLogic.jl
+end
+evaluate(ψ::LTLSpecification, τ) = ψ.formula([step.s for step in τ])
+\end{juliaverbatim}
+\end{algorithmblock}
+\end{footnotesize}
+
+\pause
+\phantom{}
+
+\textit{Signal temporal logic (STL, includes time interval)}
+\begin{footnotesize}
+\begin{algorithmblock}
+\begin{juliaverbatim}
+struct STLSpecification <: Specification
+    formula # formula specified using SignalTemporalLogic.jl
+    I       # time interval (e.g. 3:10)
+end
+evaluate(ψ::STLSpecification, τ) = ψ.formula([step.s for step in τ[ψ.I]])
+\end{juliaverbatim}
+\end{algorithmblock}
+\end{footnotesize}
+
+\end{frame}

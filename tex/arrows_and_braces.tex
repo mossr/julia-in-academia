@@ -13,6 +13,16 @@
     \tiny\upbracefill\crcr\noalign{\kern3\p@}}}}\limits}
 \makeatother
 
+\makeatletter
+\newcommand{\smallgrayunderbrace}[2]{%
+  \mathop{\vtop{\m@th\ialign{##\crcr
+      $\hfil\displaystyle{#1}\hfil$\crcr
+      \noalign{\kern3\p@\nointerlineskip}%
+      \textcolor{gray}{\tiny\upbracefill}\crcr\noalign{\kern3\p@}}}}_{\color{gray}\substack{#2}}%
+}
+\makeatother
+
 % Over and under arrows
 \newcommand{\overarrow}[2]{\overset{\mathclap{\substack{#2 \\ \downarrow}}}{#1}}
 \newcommand{\underarrow}[2]{\underset{\mathclap{\substack{\uparrow \\ #2}}}{#1}}
+\newcommand{\undergrayarrow}[2]{\underset{\mathclap{\substack{\color{gray}\uparrow \\ {\color{gray}#2}}}}{#1}}

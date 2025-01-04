@@ -1,0 +1,44 @@
+% Note, [fragile] is needed when using juliaconsole
+\begin{frame}[fragile,t]{Continuum World}
+
+\begin{table} % problem specs
+\begin{adjustbox}{width=\columnwidth}
+\begin{tabular}[t]{cll}
+    \toprule
+    System & Property & Implementation \\
+    \midrule
+    \begin{jlcode}
+    p = let
+        res = BSON.load("../data/cw_risk_neutral.bson")
+        grid = res[:grid]
+        Q = res[:Q]
+        env = ContinuumWorld(Σ=0.2*I(2))
+        sensor = IdealSensor()
+        agent = InterpAgent(grid, Q)
+        cw = System(agent, env, sensor)
+
+        Random.seed!(0)
+        τ = rollout(cw, d=20)
+
+        ax = plot_cw(env)
+        plot_cw_trajectory!(ax, τ, color="pastelGreen")
+        ax.height = "4cm"
+        ax.width = "4cm"
+        ax.title = "Continuum World"
+        TikzPicture(PGFPlots.tikzCode(ax), options="baseline=(current bounding box.center)")
+    end
+    plot(p)
+    \end{jlcode}
+    \plot{fig/cw_system} \vspace{0.5cm} & 
+    \begin{tabular}{@{}l@{}} \textit{``Reach the goal without} \\ \textit{hitting the obstacle''} \\ $G(s_t)$: $s_t$ is in the goal region \\ $F(s_t)$: $s_t$ is in the obstacle region \\ $\psi = \lozenge G(s_t) \wedge \square \neg F(s_t)$\end{tabular} &
+    \begin{tabular}{@{}l@{}}
+    \small \jlv{G = @formula s->norm(s.-[6.5,7.5])≤0.5} \\
+    \small \jlv{F = @formula s->norm(s.-[4.5,4.5])≤0.5} \\
+    \small \jlv{ψ = @formula ◊(G) ∧ □(¬F)}
+    \end{tabular} \\
+    \bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\end{frame}

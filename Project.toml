@@ -1,9 +1,16 @@
 [deps]
+BSON = "fbb218c0-5317-5bc6-957e-2ee96dd4b1f0"
+ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
+Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+GridInterpolations = "bb4c363b-b914-514b-8517-4eb369bc008a"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+PGFPlots = "3b7a836e-365b-5785-a47d-02c71176b4aa"
+Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 SignalTemporalLogic = "a79a9ddd-d50e-4d85-a979-5d85760e62a0"
+TikzPictures = "37f6aa50-8035-52d0-81c2-5a1d08754b2d"
 Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
 
 [compat]
 Weave = "=0.9.4"
-
-[sources]
-SignalTemporalLogic = {path = "/Users/mossr/.julia/dev/SignalTemporalLogic"}

@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: pygments-style-algfordmdark
+Version: 0.0.0
+Summary: Pygments style for Algorithms for Decision Making (dark mode).
+Keywords: pygments algfordmdark style
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Plugins
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+License-File: LICENSE
+Requires-Dist: pygments>=2.2
+
+# pygments-style-algfordm
+
+Pygments style used in the textbook [**Algorithms for Decision Making**](https://github.com/sisl/algorithmsbook) by Mykel J. Kochenderfer, Tim A. Wheeler, and Kyle Wray.
+
+## Install
+
+You can use PIP:
+
+    $ pip install --upgrade git+https://github.com/sisl/pygments-style-algfordm#egg=pygments_style_algfordm
+
+Alternatively, you can run these commands:
+
+    $ git clone https://github.com/sisl/pygments-style-algfordm
+    $ cd pygments-style-algfordm
+    $ (sudo) python setup.py install
+
+## Acknowledgments
+
+This package is inspired by colors from the Monokai theme by Jon Skinner of Sublime Text. They have been modified to better accommodate color blindness. Contributions came from Sidd Rao, Tim Wheeler, and Mykel Kochenderfer.

@@ -1,16 +1,16 @@
-\documentclass[aspectratio=169]{beamer}
+\documentclass[aspectratio=169]{beamer-pytex}
 
 \setbeamertemplate{title page}[default][left] % left-align title page (commend out for centered title page)
 \beamertemplatenavigationsymbolsempty % remove navigation symbols
 
 \input{preamble}
 
-\title{Title of Presentation}
-\subtitle{This is a more detailed subtitle}
+\title{\texttt{SignalTemporalLogic.jl}}
+\subtitle{Introduction}
 \author{Robert Moss}
-\institute{Stanford University}
+\institute{Stanford AA228V/CS238V}
 \email{mossr@cs.stanford.edu}
-\date{\today}
+\date{}
 
 \begin{document}
 
@@ -18,17 +18,14 @@
     \maketitle
 \end{frame}
 
-% Include individual or combined slides.
-% \include{slides/example}
-% \include{slides/example-tikz}
-% \include{slides/example-algorithm}
-% \include{slides/example-definition}
-% \include{slides/example-table}
-% \include{slides/example-bullets}
-\include{slides/console}
-
-\begin{frame}{References}
-    \printbibliography
-\end{frame}
+\include{slides/pkg}
+\include{slides/spec}
+\include{slides/spec2}
+\include{slides/robustness}
+\include{slides/course}
+\include{slides/gridworld}
+\include{slides/problem-cw}
+\include{slides/problem-pendulum}
+\include{slides/problem-cas}
 
 \end{document}

@@ -5,12 +5,9 @@
 \usepackage{sourcesanspro}
 \usepackage[T1]{fontenc}
 
-\usepackage[usefamily={jl,julia,juliacon}]{pythontex}
-\setpythontexpygopt{style=algfordm}
-
 % NOTE: You will need to pull this code via the GitHub repo and compile with latexmk
 % to get new pythontex syntax highlighting working properly.
-\input{output/pythontex-files-main/main.pytxpyg}
+% \input{output/pythontex-files-main/main.pytxpyg}
 
 % TODO: albatian
 \usefonttheme{serif}
@@ -28,7 +25,6 @@
 \usepackage{algorithmicx}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
-\usepackage{textpos}
 \usepackage{xcolor}
 \usepackage{multirow}
 \usepackage{longtable,tabularx,booktabs}
@@ -38,13 +34,40 @@
 \usepackage{fancyvrb}
 \usepackage{tcolorbox}
 \usepackage{ifthen}
+\usepackage{pagecolor}
+\usepackage{textpos}
+\usepackage{calc}
+\usepackage{adjustbox}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Unicode settings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]
-\usepackage{newunicodechar}
-\newfontface{\calligraphic}{Latin Modern Math}[Scale=0.85]
+% \setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]
+% \usepackage{newunicodechar}
+% \newfontface{\calligraphic}{Latin Modern Math}[Scale=0.85]
+
+% https://juliamono.netlify.app/faq/#can_i_use_it_in_a_latex_document
+\setmonofont{JuliaMono-Regular}[
+	UprightFont = JuliaMono-Medium,
+	BoldFont = JuliaMono-ExtraBold,
+	ItalicFont = JuliaMono-Light,
+    Contextuals = Alternate,
+    Scale = MatchLowercase,
+    Path = ./fonts/,
+    Extension = .ttf
+]
+
+% Remove empty lines in juliaconsole
+% https://github.com/gpoore/pythontex/issues/98#issuecomment-318078264
+\makeatletter
+\AtBeginEnvironment{juliaconsole}{%
+  \def\FV@@PreProcessLine{%
+    \expandafter\ifstrempty\expandafter{\FV@Line}{}{%
+      \FV@StepLineNo
+      \FV@Gobble
+      \expandafter\FV@ProcessLine\expandafter{\FV@Line}}}%
+}
+\makeatother
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,6 +86,7 @@
 % Colors
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifdefined\INVERTED
+    \pagecolor{black} % Comment out to hide background
     \colorlet{primarycolor}{white}
     \colorlet{secondarycolor}{black}
     \colorlet{shadecolor}{black!85}
@@ -94,31 +118,62 @@
 \newcommand{\darkgreen}[1]{{\color{darkgreen} #1}}
 \newcommand{\darkred}[1]{{\color{cardinal} #1}}
 
-\definecolor{pastelMagenta}{HTML}{FF48CF}
-\definecolor{pastelPurple}{HTML}{8770FE}
-\definecolor{pastelBlue}{HTML}{1BA1EA}
-\definecolor{pastelSeaGreen}{HTML}{14B57F}
-\definecolor{pastelGreen}{HTML}{3EAA0D}
-\definecolor{pastelOrange}{HTML}{C38D09}
-\definecolor{pastelRed}{HTML}{F5615C}
+% Colorblind-Friendly Color Scheme
+% A compromise between the original colorscheme and
+% this palette: https://www.nature.com/articles/nmeth.1618
+\definecolor{pastelMagenta}{HTML}{FF48CF} % magenta
+\definecolor{pastelPurple}{HTML}{8770FE} % purple
+\definecolor{pastelBlue}{RGB}{0,114,178} % blue 0072B2
+\definecolor{pastelSkyBlue}{RGB}{86,180,233} % sky blue 56B4E9
+\definecolor{pastelGreen}{RGB}{0,158,115} % green 009E73
+\definecolor{pastelOrange}{RGB}{230,159,0} % orange E69F00
+\definecolor{pastelRed}{HTML}{F5615C} % red
+\definecolor{darkColor}{HTML}{300A24} % dark
+\definecolor{pastelGreenBlue}{RGB}{43, 169, 174} % mix of pastelGreen and pastelSkyBlue
 
-% \begin{jlcode}
-%     include("../../jl/support_code.jl")
+\newcommand{\colorPastelMagenta}{magenta}
+\newcommand{\colorPastelPurple}{purple}
+\newcommand{\colorPastelBlue}{blue}
+\newcommand{\colorPastelSkyBlue}{sky blue}
+\newcommand{\colorPastelGreen}{green}
+\newcommand{\colorPastelOrange}{orange}
+\newcommand{\colorPastelRed}{red}
+\newcommand{\colorDark}{gray}
 
-%     using Colors
-%     using ColorSchemes
-%     pasteljet = ColorMaps.RGBArrayMap(ColorSchemes.viridis, interpolation_levels=500, invert=true);
-%     pastelRedBlue = ColorMaps.RGBArrayMap([RGB(246/255, 21/255, 92/255),
-%                                            RGB(1.0,1.0,1.0),
-%                                            RGB( 27/255,161/255,234/255)], interpolation_levels=500);
-% \end{jlcode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer hide lines of code settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tcbset{
+  coloredbox/.style={
+    colback=secondarycolor,
+    colframe=secondarycolor,
+    boxrule=0pt,
+    width=\linewidth,
+    sharp corners,
+    height=0.8\baselineskip,
+    % opacityback=0.5,
+    before skip=0pt,
+    after skip=0pt
+  }
+}
+
+% Define a temporary length
+\newlength{\testlen}
+\newcommand{\lineblackout}[1]{%
+    % Calculate the total shift: -1\baselineskip - (N * 0.8)\baselineskip
+    \pgfmathsetlength{\testlen}{-1\baselineskip - #1 * 0.8\baselineskip}%
+    \begin{textblock*}{\textwidth}(0cm, \testlen)
+        \begin{tcolorbox}[standard jigsaw, coloredbox]\end{tcolorbox}
+    \end{textblock*}
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PGFPlot settings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \usepackage[pgfplots]{../juliaplots.sty/juliaplots}
 \usepackage{pgfplots}
+
 \pgfplotsset{compat=newest}
 \pgfplotsset{every axis legend/.append style={legend cell align=left, font=\footnotesize, draw=none, fill=none}}
 \pgfplotsset{every axis/.append style={axis background/.style={fill=secondarycolor}}}
@@ -131,6 +186,19 @@
 \usepgfplotslibrary{patchplots}
 \usepgfplotslibrary{statistics}
 \usepgfplotslibrary{ternary}
+
+
+% NOTE: This won't work in Overleaf
+\begin{jlcode}
+  include("../../jl/support_code.jl")
+
+  using Colors
+  using ColorSchemes
+  pasteljet = ColorMaps.RGBArrayMap(ColorSchemes.viridis, interpolation_levels=500, invert=true);
+  pastelRedBlue = ColorMaps.RGBArrayMap([RGB(246/255, 21/255, 92/255),
+                                         RGB(1.0,1.0,1.0),
+                                         RGB( 27/255,161/255,234/255)], interpolation_levels=500);
+\end{jlcode}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,6 +216,13 @@
 \usetikzlibrary{graphs}
 \usetikzlibrary{graphdrawing}
 \usetikzlibrary{shapes}
+\usetikzlibrary{overlay-beamer-styles}
+
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{main}
+\pgfdeclarelayer{foreground}
+\pgfdeclarelayer{top}
+\pgfsetlayers{background, main, foreground, top}
 
 \tikzset{
     func/.style = {rectangle, rounded corners=1, draw},
@@ -162,7 +237,6 @@
 \tikzset{myarrow/.style={line width = 0.05cm, ->, rounded corners=5mm}}
 \tikzset{myaxis/.style={thick, ->, line cap=rect}}
 \tikzset{roundednode/.style={rounded corners=4mm,draw=primarycolor,fill=secondarycolor,line width=0.05cm, minimum size=0.35in, align=center}}
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -203,6 +277,13 @@
     \usebeamercolor[fg]{footline}%
     \hspace{1em}%
     \insertframenumber/\inserttotalframenumber
+}
+
+% Fix right-hand line of non-black pixels in Preview
+\setbeamertemplate{background}{%
+    \begin{tikzpicture}[remember picture,overlay]
+        \fill[secondarycolor] (current page.south west) rectangle (current page.north east);
+    \end{tikzpicture}
 }
 
 \newcommand{\email}[1]{\def\@email{\texttt{\MakeLowercase{\textls[10]{#1}}}}}
@@ -360,6 +441,7 @@
 \DeclareMathOperator{\Cost}{Cost}
 \DeclareMathOperator{\FutureCost}{FutureCost}
 \DeclareMathOperator{\Succ}{Succ}
+\DeclareMathOperator{\until}{\mathcal{U}}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
