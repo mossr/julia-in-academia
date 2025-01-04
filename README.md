@@ -1,8 +1,21 @@
 # SignalTemporalLogic.jl Slides
 
-AA228V/CS238V Stanford University.
+**Stanford University**: _AA228V/CS238V Validation of Safety-Critical Systems_.
 
-Install lexer and style:
+See PDF at [`output/main.pdf`](./output/main.pdf).
+
+<p align="center">
+  <kbd>
+    <a href="./output/main.pdf">
+      <img src="./data/main.svg">
+    </a>
+  </kbd>
+</p>
+
+## Installation
+
+1. Clone repo and `cd` to the folder.
+1. Install lexer and style:
 ```
 python -m venv stl
 source stl/bin/activate
@@ -17,3 +30,5 @@ To compile, run:
 ```
 latexmk
 ```
+
+This is an updated fork of [mossr/julia-tufte-beamer](https://github.com/mossr/julia-tufte-beamer).
