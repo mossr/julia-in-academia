@@ -1,7 +1,7 @@
 % Note, [fragile] is needed when using juliaconsole
 \begin{frame}[fragile,t]{Aircraft Collision Avoidance}
 
-\begin{table} % problem specs
+{\small\begin{table} % problem specs
 \begin{adjustbox}{width=\columnwidth}
 \begin{tabular}[t]{cll}
     \toprule
@@ -31,8 +31,10 @@
     end
     plot(p)
     \end{jlcode}
-    \plot{fig/cas_system} \vspace{0.5cm}
-    & \begin{tabular}{@{}l@{}} \textit{``Ensure at least 50 meters relative} \\ \textit{altitude between 40 and 41 seconds''} \\ $S(s_t)$: $|h_t| \ge 50$ \\ $\psi = \square_{[40,41]} S(s_t)$\end{tabular} & 
+    \plot{fig/cas_system}
+    &
+    \begin{tabular}{@{}l@{}} \textit{``Ensure at least 50 meters relative} \\ \textit{altitude between 40 and 41 seconds''} \\ $S(s_t)$: $|h_t| \ge 50$ \\ $\psi = \square_{[40,41]} S(s_t)$\end{tabular}
+    & 
     \begin{tabular}{@{}l@{}}
     \small \jlv{S = @formula s->abs(s[1])≥50} \\
     \small \jlv{ψ = @formula □(40:41, S)}
@@ -40,6 +42,6 @@
     \bottomrule
 \end{tabular}
 \end{adjustbox}
-\end{table}
+\end{table}}
 
 \end{frame}

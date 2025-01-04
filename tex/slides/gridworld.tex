@@ -7,15 +7,16 @@
 \begin{columns}
 \begin{column}{0.6\textwidth}
     \begin{align*}
-        \only<2->{F(s_t) &: \text{the state $s$ at time $t$ contains an obstacle} \\}
-        \only<3->{G(s_t) &: \text{the state $s$ at time $t$ is the goal} \\}
-        \only<4->{C(s_t) &: \text{the state $s$ at time $t$ is the checkpoint}}
+        \onslide<2->{F(s_t) &: \text{the state $s$ at time $t$ contains an obstacle} \\}
+        \onslide<3->{G(s_t) &: \text{the state $s$ at time $t$ is the goal} \\}
+        \onslide<4->{C(s_t) &: \text{the state $s$ at time $t$ is the checkpoint}}
     \end{align*}
-    \begin{equation*}
-      \only<5>{\psi = \gwone\phantom{\gwtwo}\phantom{\gwthree}}
+    \[
+      \only<1-4>{\phantom{\psi = \gwone\gwtwo\gwthree}}
+      \only<5>{\psi = \gwone\phantom{\gwtwo\gwthree}}
       \only<6>{\psi = \gwone\gwtwo\phantom{\gwthree}}
       \only<7->{\psi = \gwone\gwtwo\gwthree}
-    \end{equation*}
+    \]
 \end{column}
 \begin{column}{0.4\textwidth}
     \begin{jlcode}

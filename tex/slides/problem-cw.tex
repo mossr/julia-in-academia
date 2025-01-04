@@ -1,6 +1,7 @@
 % Note, [fragile] is needed when using juliaconsole
 \begin{frame}[fragile,t]{Continuum World}
 
+{\small
 \begin{table} % problem specs
 \begin{adjustbox}{width=\columnwidth}
 \begin{tabular}[t]{cll}
@@ -29,8 +30,10 @@
     end
     plot(p)
     \end{jlcode}
-    \plot{fig/cw_system} \vspace{0.5cm} & 
-    \begin{tabular}{@{}l@{}} \textit{``Reach the goal without} \\ \textit{hitting the obstacle''} \\ $G(s_t)$: $s_t$ is in the goal region \\ $F(s_t)$: $s_t$ is in the obstacle region \\ $\psi = \lozenge G(s_t) \wedge \square \neg F(s_t)$\end{tabular} &
+    \plot{fig/cw_system} \vspace{0.3cm}
+    & 
+    \begin{tabular}{@{}l@{}} \textit{``Reach the goal without} \\ \textit{hitting the obstacle''} \\ $G(s_t)$: $s_t$ is in the goal region \\ $F(s_t)$: $s_t$ is in the obstacle region \\ $\psi = \lozenge G(s_t) \wedge \square \neg F(s_t)$\end{tabular}
+    &
     \begin{tabular}{@{}l@{}}
     \small \jlv{G = @formula s->norm(s.-[6.5,7.5])≤0.5} \\
     \small \jlv{F = @formula s->norm(s.-[4.5,4.5])≤0.5} \\
@@ -39,6 +42,6 @@
     \bottomrule
 \end{tabular}
 \end{adjustbox}
-\end{table}
+\end{table}}
 
 \end{frame}

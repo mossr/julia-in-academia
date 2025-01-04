@@ -1,7 +1,7 @@
 % Note, [fragile] is needed when using juliaconsole
 \begin{frame}[fragile,t]{Inverted Pendulum}
 
-\begin{table} % problem specs
+{\footnotesize\begin{table} % problem specs
 \begin{adjustbox}{width=\columnwidth}
 \begin{tabular}[t]{cll}
     \toprule
@@ -22,7 +22,10 @@
         \node[white] at (1.1, 1.0) {\footnotesize $\pi/4$};
         \node[white] at (-1.1, 1.0) {\footnotesize $-\pi/4$};
         \node at (0, 1.6) {Inverted Pendulum};
-    \end{tikzpicture} \vspace{0.4cm} & \begin{tabular}{@{}l@{}} \textit{``Keep the pendulum balanced''} \\ $B(s_t)$: $|\theta_t| \le \pi/4$ \\ $\psi = \square B(s_t)$\end{tabular} & 
+    \end{tikzpicture}
+    &
+    \begin{tabular}{@{}l@{}} \textit{``Keep the pendulum balanced''} \\ $B(s_t)$: $|\theta_t| \le \pi/4$ \\ $\psi = \square B(s_t)$\end{tabular}
+    & 
     \begin{tabular}{@{}l@{}}
     \small \jlv{B = @formula s->abs(s[1])≤π/4} \\
     \small \jlv{ψ = @formula □(B)}
@@ -30,6 +33,6 @@
     \bottomrule
 \end{tabular}
 \end{adjustbox}
-\end{table}
+\end{table}}
 
 \end{frame}
