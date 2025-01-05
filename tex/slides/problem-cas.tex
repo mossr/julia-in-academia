@@ -1,13 +1,4 @@
-% Note, [fragile] is needed when using juliaconsole
-\begin{frame}[fragile,t]{Aircraft Collision Avoidance}
-
-{\small\begin{table} % problem specs
-\begin{adjustbox}{width=\columnwidth}
-\begin{tabular}[t]{cll}
-    \toprule
-    System & Property & Implementation \\
-    \midrule
-    \begin{jlcode}
+\begin{jlcode}
     p = let
         res = BSON.load("../data/cas_policy.bson")
         grid = res[:grid]
@@ -30,15 +21,26 @@
         TikzPicture(PGFPlots.tikzCode(ax), options="baseline=(current bounding box.center)")
     end
     plot(p)
-    \end{jlcode}
-    \plot{fig/cas_system}
+\end{jlcode}
+\plotlater{fig/cas_system}
+
+% Note, [fragile] is needed when using juliaconsole
+\begin{frame}[fragile,t]{Aircraft Collision Avoidance}
+
+{\small\begin{table} % problem specs
+\begin{adjustbox}{width=\columnwidth}
+\begin{tabular}[t]{cll}
+    \toprule
+    System & Property & Implementation \\
+    \midrule
+    \onslide<2->{\input{fig/cas_system}}
     &
-    \begin{tabular}{@{}l@{}} \textit{``Ensure at least 50 meters relative} \\ \textit{altitude between 40 and 41 seconds''} \\ $S(s_t)$: $|h_t| \ge 50$ \\ $\psi = \square_{[40,41]} S(s_t)$\end{tabular}
+    \onslide<3->{\begin{tabular}{@{}l@{}} \textit{``Ensure at least 50 meters relative} \\ \textit{altitude between 40 and 41 seconds''} \\ $S(s_t)$: $|h_t| \ge 50$ \\ $\psi = \square_{[40,41]} S(s_t)$\end{tabular}}
     & 
-    \begin{tabular}{@{}l@{}}
+    \onslide<4->{\begin{tabular}{@{}l@{}}
     \small \jlv{S = @formula s->abs(s[1])≥50} \\
     \small \jlv{ψ = @formula □(40:41, S)}
-    \end{tabular} \\
+    \end{tabular}} \\
     \bottomrule
 \end{tabular}
 \end{adjustbox}

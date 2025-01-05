@@ -7,7 +7,7 @@
     \toprule
     System & Property & Implementation \\
     \midrule
-    \begin{tikzpicture}[baseline=(current bounding box.center)]
+    \onslide<2->{\begin{tikzpicture}[baseline=(current bounding box.center)]
         \fill[pastelGreen!30] (0.707, 0.707) arc (45:135:1) -- cycle;
         \fill[pastelRed!30] (-0.707, 0.707) arc (135:405:1) -- cycle;
         \filldraw[fill=pastelGreen!30, draw=pastelGreen!30] (0, 0) -- (0.707, 0.707) -- (-0.707, 0.707) -- cycle;
@@ -22,14 +22,14 @@
         \node[white] at (1.1, 1.0) {\footnotesize $\pi/4$};
         \node[white] at (-1.1, 1.0) {\footnotesize $-\pi/4$};
         \node at (0, 1.6) {Inverted Pendulum};
-    \end{tikzpicture}
+    \end{tikzpicture}}
     &
-    \begin{tabular}{@{}l@{}} \textit{``Keep the pendulum balanced''} \\ $B(s_t)$: $|\theta_t| \le \pi/4$ \\ $\psi = \square B(s_t)$\end{tabular}
+    \onslide<3->{\begin{tabular}{@{}l@{}} \textit{``Keep the pendulum balanced''} \\ $B(s_t)$: $|\theta_t| \le \pi/4$ \\ $\psi = \square B(s_t)$\end{tabular}}
     & 
-    \begin{tabular}{@{}l@{}}
+    \onslide<4->{\begin{tabular}{@{}l@{}}
     \small \jlv{B = @formula s->abs(s[1])≤π/4} \\
     \small \jlv{ψ = @formula □(B)}
-    \end{tabular} \\
+    \end{tabular}} \\
     \bottomrule
 \end{tabular}
 \end{adjustbox}
