@@ -8,6 +8,7 @@ using TikzPictures
 using Distributions
 using GridInterpolations
 using Random
+import ForwardDiff: gradient
 
 # include("../output/all_algorithm_blocks.jl")
 

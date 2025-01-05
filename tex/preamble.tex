@@ -151,7 +151,7 @@
     boxrule=0pt,
     width=\linewidth,
     sharp corners,
-    height=0.8\baselineskip,
+    height=0.83\baselineskip,
     % opacityback=0.5,
     before skip=0pt,
     after skip=0pt
@@ -161,8 +161,8 @@
 % Define a temporary length
 \newlength{\testlen}
 \newcommand{\lineblackout}[1]{%
-    % Calculate the total shift: -1\baselineskip - (N * 0.8)\baselineskip
-    \pgfmathsetlength{\testlen}{-1\baselineskip - #1 * 0.8\baselineskip}%
+    % Calculate the total shift: -\baselineskip - (N * 0.8)\baselineskip
+    \pgfmathsetlength{\testlen}{-\baselineskip - #1 * 0.805\baselineskip}%
     \begin{textblock*}{\textwidth}(0cm, \testlen)
         \begin{tcolorbox}[standard jigsaw, coloredbox]\end{tcolorbox}
     \end{textblock*}
@@ -325,7 +325,9 @@
 \setbeamertemplate{frametitle}
 {
     \vspace*{0.7cm}
-    \insertframetitle
+    \insertframetitle\par
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
+
 }
 
 \AtBeginSection[]{

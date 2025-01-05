@@ -1,0 +1,43 @@
+\begin{figure}
+    \begin{jlcode}
+    p = let
+        times = collect(1:10)
+        τ = [-1.0, -3.2, 2.0, 1.5, 3.0, 0.5, -0.5, -2.0, -4.0, -1.5];
+        ψ = @formula ◊(sₜ -> sₜ > 0);
+        ∇ = gradient(τ->ρ(τ, ψ), τ)
+        ∇̃ = gradient(τ->ρ̃(τ, ψ), τ)
+
+        xmin, xmax, ymin, ymax = 1, 10, -5, 4
+        # xmin, xmax, ymin, ymax = 1, 10, -0.1, 1.1
+        ax = Axis(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, width="7cm", height="4cm")
+        ax.xlabel = "Time"
+        ax.ylabel = L"s"
+        # ax.title = raw"${\color{pastelSkyBlue}\psi_1 = \lozenge\big( s_t > 0 \big)} \qquad {\color{pastelGreen}\psi_2 = \square\big( s_t > 0 \big)}$"
+        ax.style = raw"title style={font=\footnotesize}"
+
+        # Used to add phantom right yaxis for better centering
+        axr = deepcopy(ax)
+        axr.style *= raw", axis y line*=right, axis x line=none, yticklabel={\phantom{\pgfmathprintnumber{\tick}}}"
+        axr.ylabel = "\\phantom{$(ax.ylabel)}"
+        push!(axr, Plots.Command(""))
+
+        push!(ax, Plots.Linear(times, τ, style="solid, mark=*, gray, line width=1pt, mark options={fill=gray!50, draw=gray}, mark size=2pt"))
+        push!(ax, Plots.Linear([xmin, xmax], [0, 0], style="dotted, mark=none, gray, line width=1pt"))
+
+        push!(ax, Plots.Linear(times, ∇, style="solid, mark=*, pastelGreen, line width=1pt, mark options={fill=pastelGreen!50, draw=pastelGreen}, mark size=2pt"))
+        push!(ax, Plots.Linear(times, ∇̃, style="solid, mark=*, pastelBlue, line width=1pt, mark options={fill=pastelBlue!50, draw=pastelBlue}, mark size=2pt"))
+
+        # push!(ax, Plots.Scatter([5], [3], style="only marks, mark=*, mark size=2pt, mark options={fill=pastelSkyBlue!50, draw=pastelSkyBlue}"))
+        # push!(ax, Plots.Linear([xmin, xmax], [3, 3], style="dashed, mark=none, pastelSkyBlue, line width=1pt"))
+        # push!(ax, Plots.Command("\\node[anchor=center] at (axis cs: 8, 2.3) {\\scriptsize \\textcolor{pastelSkyBlue}{\$\\rho_1\$}};"))
+
+        # push!(ax, Plots.Scatter([9], [-4], style="only marks, mark=*, mark size=2pt, mark options={fill=pastelGreen!50, draw=pastelGreen}"))
+        # push!(ax, Plots.Linear([xmin, xmax], [-4, -4], style="dashed, mark=none, pastelGreen, line width=1pt"))
+        # push!(ax, Plots.Command("\\node[anchor=center] at (axis cs: 5, -3.3) {\\scriptsize \\textcolor{pastelGreen}{\$\\rho_2\$}};"))
+
+        [axr, ax]
+    end
+    plot(p)
+    \end{jlcode}
+    \plotlater{fig/jl_robustness_gradient}
+\end{figure}
