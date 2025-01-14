@@ -3,19 +3,19 @@
 \defbeamertemplate*{title page}{customized}[1][]
 {
     \ifdefined\CENTERTITLE\begin{center}\fi
-    \usebeamerfont{title}\textls[100]{\textbf{\inserttitle}}\par
-    \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\textls[100]{\insertsubtitle}\par\par
+    {\usebeamerfont{title}\textls[100]{\textbf{\inserttitle}}}\par
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\textls[100]{\insertsubtitle}}\par\par
     \ifdefined\CENTERTITLE\end{center}\fi
     \vfill
     \begin{center}
-        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+        {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic}
     \end{center}
     % \vfill
     \ifdefined\CENTERTITLE\begin{center}\fi
-    \usebeamerfont{author}\usebeamercolor[fg]{author}\textls[100]{\insertauthor}\par
-    \usebeamerfont{institute}{\usebeamercolor[fg]{institute}\textls[100]{\insertinstitute}}\par
+    {\usebeamerfont{author}\usebeamercolor[fg]{author}\textls[100]{\insertauthor}}\par
+    {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\textls[100]{\insertinstitute}}\par
     % \bigskip
-    {\usebeamercolor[fg]{email}\@email}\par
+    {\usebeamerfont{email}\usebeamercolor[fg]{email}\@email}\par
     \usebeamerfont{date}{\usebeamercolor[fg]{date}\textls[100]{\insertdate}}\par
     \ifdefined\CENTERTITLE\end{center}\fi
 }
