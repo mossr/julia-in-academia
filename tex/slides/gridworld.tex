@@ -1,6 +1,6 @@
-\def\gwone{\smallgrayunderbrace{\lozenge G(s_t)}{\substack{\text{reaches}\\\text{goal}}}}
-\def\gwtwo{\, \wedge \, \smallgrayunderbrace{\neg C(s_t) \until G(s_t)}{\substack{\text{reach checkpoint}\\\text{before goal}}}}
-\def\gwthree{\, \wedge \, \smallgrayunderbrace{\square \neg F(s_t)}{\substack{\text{always avoid}\\\text{obstacles}}}}
+\def\gwone{\smallgrayunderbrace{\lozenge G}{\substack{\text{reaches}\\\text{goal}}}}
+\def\gwtwo{\, \wedge \, \smallgrayunderbrace{\neg C \until G}{\substack{\text{reach}\\\text{checkpoint}\\\text{before goal}}}}
+\def\gwthree{\, \wedge \, \smallgrayunderbrace{\square \neg F}{\substack{\text{always}\\\text{avoid}\\\text{obstacles}}}}
 % Note, [fragile] is needed when using juliaconsole
 \begin{frame}[fragile,t]{Grid World}
 
