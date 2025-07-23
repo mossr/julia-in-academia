@@ -119,7 +119,7 @@
 \definecolor{darkblue}{RGB}{21,21,140}
 \definecolor{sun}{RGB}{234,171,0}
 \definecolor{repo}{HTML}{B6B1A9}
-\definecolor{paloalto}{HTML}{2D716F}
+\definecolor{paloalto}{HTML}{5A9C99}
 
 \newcommand{\darkblue}[1]{{\color{darkblue} #1}}
 \newcommand{\darkgreen}[1]{{\color{darkgreen} #1}}
@@ -273,6 +273,14 @@
   \endvarwidth
   \par
 }
+
+\newenvironment{overflowexample}{%
+	\begin{mdframed}[backgroundcolor=black!5,rightline=false,leftline=false]
+		% \vspace{-\baselineskip}
+}{%
+	\end{mdframed}
+}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
