@@ -2,7 +2,7 @@ ensure_path( 'TEXINPUTS', './tex//' );
 ensure_path( 'BIBINPUTS', './tex//' );
 
 # Path to your Python virtual environment
-my $env_path = 'stl';
+my $env_path = 'env';
 $ENV{'PATH'} = "$env_path/bin:" . $ENV{'PATH'};
 $ENV{'VIRTUAL_ENV'} = $env_path; # Use python environment
 

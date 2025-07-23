@@ -1,16 +1,24 @@
-# SignalTemporalLogic.jl Slides
+# Julia in Academia Slides
 
-**Stanford University**: _AA228V/CS238V Validation of Safety-Critical Systems_.
+**JuliaCon 2025**: _Julia in Academia: Textbooks, Stanford Courses, and the Future_.
 
-See PDF at [`output/main.pdf`](./output/main.pdf).
+Robert Moss (_Stanford University_)
+
+See the abstract for the talk [here](https://pretalx.com/juliacon-2025/talk/YT7AVS/).
 
 <p align="center">
   <kbd>
     <a href="./output/main.pdf">
-      <img src="./data/main.svg">
+      <img src="./media/algforval-juliacon.png">
     </a>
   </kbd>
 </p>
+
+## Resources
+
+- Textbook template: [sisl/tufte_algorithms_book](https://github.com/sisl/tufte_algorithms_book)
+- Slides template: [mossr/julia-tufte-beamer](https://github.com/mossr/julia-tufte-beamer)
+- Interactive papers (`PlutoPapers.jl`): [mossr/PlutoPapers.jl](https://github.com/mossr/PlutoPapers.jl)
 
 ## Installation
 
