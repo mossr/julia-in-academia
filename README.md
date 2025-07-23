@@ -19,6 +19,15 @@ See the abstract for the talk [here](https://pretalx.com/juliacon-2025/talk/YT7A
 - Textbook template: [sisl/tufte_algorithms_book](https://github.com/sisl/tufte_algorithms_book)
 - Slides template: [mossr/julia-tufte-beamer](https://github.com/mossr/julia-tufte-beamer)
 - Interactive papers (`PlutoPapers.jl`): [mossr/PlutoPapers.jl](https://github.com/mossr/PlutoPapers.jl)
+- "How We Wrote a Textbook using Julia" (Tim Wheeler, JuliaCon 2019): https://youtu.be/ofWy5kaZU3g
+- PDFs of Julia-based textbooks: https://algorithmsbook.com
+- Stanford's _Validation of Safety-Critical Systems_ lecture videos: [youtube-playlist](https://www.youtube.com/playlist?list=PLoROMvodv4rOq1LMLI8U7djzDb8--xpaC)
+- Stanford AA228V course material:
+    - Core library: [sisl/StanfordAA228V.jl](https://github.com/sisl/StanfordAA228V.jl)
+    - Pluto notebooks: [sisl/AA228VProjects](https://github.com/sisl/AA228VProjects)
+    - Lecture notebooks: [sisl/AA228VLectureNotebooks](https://github.com/sisl/AA228VLectureNotebooks)
+    - Gradescope.jl: [sisl/Gradescope.jl](https://github.com/sisl/Gradescope.jl)
+    - Course-specific Gradescope.jl implementation: [sisl/AA228VGradescope.jl](https://github.com/sisl/AA228VGradescope.jl)
 
 ## Installation
 
