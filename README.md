@@ -4,7 +4,7 @@
 
 Robert Moss (_Stanford University_)
 
-See the abstract for the talk [here](https://pretalx.com/juliacon-2025/talk/YT7AVS/).
+See the abstract for the talk [here](https://pretalx.com/juliacon-2025/talk/YT7AVS/) and slides PDF [here](./output/main.pdf).
 
 <p align="center">
   <kbd>
