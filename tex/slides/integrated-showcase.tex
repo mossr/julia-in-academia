@@ -1,0 +1,151 @@
+\begin{frame}[fragile]{Showcase: \normalfont\jlv{IntervalArithmetic.jl} and \jlv{LazySets.jl}} \pause
+
+{\scriptsize
+\begin{algorithmblock}
+\begin{juliaverbatim}
+struct NaturalInclusion <: ReachabilityAlgorithm
+    h # time horizon
+end
+
+function r(sys, x)
+    s, 𝐱 = extract(sys.env, x)
+    τ = rollout(sys, s, 𝐱)
+    return τ[end].s
+end
+
+to_hyperrectangle(𝐈) = Hyperrectangle(low=[i.lo for i in 𝐈], 
+                                      high=[i.hi for i in 𝐈])
+
+function reachable(alg::NaturalInclusion, sys)
+    𝐈′s = []
+    for d in 1:alg.h
+        𝐈 = intervals(sys, d)
+        push!(𝐈′s, r(sys, 𝐈))
+    end
+    return UnionSetArray([to_hyperrectangle(𝐈′) for 𝐈′ in 𝐈′s])
+end
+\end{juliaverbatim}
+\end{algorithmblock}
+}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Showcase: \normalfont\jlv{IntervalArithmetic.jl} and \jlv{LazySets.jl}}
+
+\begin{figure} % interval counterparts
+    \begin{jlcode}
+    p = let
+        xmin, xmax, ymin, ymax = 0, 2.75, 0, 10
+        ax1 = plot_interval(exp, interval(1, 2), interval(exp(1), exp(2)), xmin, xmax, ymin, ymax, fxmax=log(ymax), color="pastelSkyBlue")
+        ax1.xlabel = L"x"
+        ax1.ylabel = L"f(x)"
+        ax1.title = L"f(x) = \exp(x)"
+        ax1.height = "4.5cm"
+        ax1.width = "4.5cm"
+
+        xmin, xmax, ymin, ymax = -2, 2, 0, 4.5
+        ax2 = plot_interval(x->x^2, interval(-1.5, 1), interval(0, 1.5^2), xmin, xmax, ymin, ymax, color="pastelSkyBlue")
+        ax2.xlabel = L"x"
+        ax2.title = L"\phantom{\sin(x)}f(x) = x^2\phantom{\sin(x)}"
+        ax2.height = "4.5cm"
+        ax2.width = "4.5cm"
+
+        xmin, xmax, ymin, ymax = -3.14, 3.14, -1.5, 1.5
+        ax3 = plot_interval(sin, interval(0, 2), interval(0, 1), xmin, xmax, ymin, ymax, color="pastelSkyBlue")
+        ax3.xlabel = L"x"
+        ax3.title = L"f(x) = \sin(x)"
+        ax3.height = "4.5cm"
+        ax3.width = "4.5cm"
+
+        g = GroupPlot(3, 1, groupStyle="horizontal sep=1cm")
+        push!(g, ax1)
+        push!(g, ax2)
+        push!(g, ax3)
+        g
+    end
+    plot(p)
+    \end{jlcode}
+    \begin{center}
+        \plot{fig/interval_counterparts}
+    \end{center}
+	\caption{Example of the interval counterparts for the $\exp$, square, and $\sin$ functions.}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Showcase: \normalfont\jlv{IntervalArithmetic.jl} and \jlv{LazySets.jl}}
+
+{\small
+\begin{algorithmblock}
+\begin{juliaverbatim}
+function (env::InvertedPendulum)(s, a)
+    θ, ω = s[1], s[2]
+    dt, g, m, l = env.dt, env.g, env.m, env.l
+    ω = ω + (3g / (2 * l) * sin(θ) + 3 * a / (m * l^2)) * dt
+    θ = θ + ω * dt
+    return [θ, ω]
+end
+\end{juliaverbatim}
+\end{algorithmblock}
+}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Showcase: \normalfont\jlv{IntervalArithmetic.jl} and \jlv{LazySets.jl}}
+    
+\begin{figure}
+    \begin{jlcode}
+    function intervals(sys, d)
+        disturbance_mag = 0.01
+        θmin, θmax = -π/16, π/16
+        ωmin, ωmax =  -1.0, 1.0
+        𝐈 = [interval(θmin, θmax), interval(ωmin, ωmax)]
+        for i in 1:d
+            push!(𝐈, interval(-disturbance_mag, disturbance_mag))
+            push!(𝐈, interval(-disturbance_mag, disturbance_mag))
+        end
+        return 𝐈
+    end
+    function extract(env::InvertedPendulum, x)
+        s = x[1:2]
+        𝐱 = [Disturbance(0, 0, x[i:i+1]) for i in 3:2:length(x)]
+        return s, 𝐱
+    end
+    p = let
+        agent = ProportionalController([-15., -8.])
+        env = InvertedPendulum()
+        disturbance_mag = 0.01
+        θmin, θmax = -π/16, π/16
+        ωmin, ωmax =  -1.0, 1.0
+        sensor = AdditiveNoiseSensor(Product([Uniform(-disturbance_mag, disturbance_mag), Uniform(-disturbance_mag, disturbance_mag)]))
+        Ps(env::InvertedPendulum) = Product([Uniform(θmin, θmax), Uniform(ωmin, ωmax)])
+        inverted_pendulum = System(agent, env, sensor)
+
+        d = 2
+        Random.seed!(4)
+        τs = [rollout(inverted_pendulum, d=d) for i in 1:150]
+        sfinals = [τ[end].s for τ in τs]
+
+        alg = NaturalInclusion(d)
+        ℛ = reachable(alg, inverted_pendulum)
+
+        ax = inv_pendulum_state_space(ymin=-3, ymax=3)
+        push!(ax, Plots.Scatter([s[1] for s in sfinals], [s[2] for s in sfinals], 
+            style="solid, mark=*, mark size=1pt, mark options={draw=pastelSkyBlue, fill=pastelSkyBlue!80, fill opacity=1.0, draw opacity=1.0}"))
+        plot_polytope!(ax, ℛ[2], fill_color="pastelPurple!20!black", draw_color="pastelPurple", fill_alpha=1.0, draw_alpha=1.0)
+        ax.height = "4.5cm"
+        ax.width = "4.5cm"
+        ax
+    end
+    plot(p)
+    \end{jlcode}
+    \begin{center}
+        \plot{fig/natural_inclusion_pendulum}
+    \end{center}
+    \caption{Inverted pendulum reachable set using \jlv{IntervalArithmetic.jl} and \jlv{LazySets.jl}.}
+\end{figure}
+
+\end{frame}

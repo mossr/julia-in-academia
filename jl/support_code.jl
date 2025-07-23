@@ -7,6 +7,8 @@ using BSON
 using TikzPictures
 using Distributions
 using GridInterpolations
+using IntervalArithmetic
+using LazySets
 using Random
 import ForwardDiff: gradient
 
@@ -260,4 +262,193 @@ function plot_cas_traj!(ax, sample; color="black", alpha=1.0, linewidth="1pt")
     τs = [s[4] for s in states]
     hs = [s[1] for s in states]
     push!(ax, Plots.Linear(τs, hs, style="$color, solid, line width=$linewidth, mark=none, opacity=$alpha"))
+end
+
+function plot_interval(f, input_interval, output_interval, xmin, xmax, ymin, ymax; color="pastelBlue", cinput=color, fxmax=xmax, alpha=0.3, draw="none", linewidth="2pt", lwdash="1.5pt")
+    xlo, xhi = inf(input_interval), sup(input_interval)
+    ylo, yhi = inf(output_interval), sup(output_interval)
+    ax = Axis(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, width="5cm", height="5cm")
+    push!(ax, Plots.Linear(f, (xmin, fxmax), style="solid, gray, line width=$linewidth"))
+    xbar_hw = 0.03 * (ymax - ymin)
+    ybar_hw = 0.03 * (xmax - xmin)
+    push!(ax, Plots.Command("\\draw[$cinput, line width=2pt] (axis cs: $(xlo), $(ymin-xbar_hw)) -- ($(xlo), $(ymin+ybar_hw))"))
+    push!(ax, Plots.Command("\\draw[$cinput, line width=2pt] (axis cs: $(xhi), $(ymin-xbar_hw)) -- ($(xhi), $(ymin+xbar_hw))"))
+    push!(ax, Plots.Command("\\draw[$cinput, line width=2pt] (axis cs: $(xlo), $(ymin)) -- ($(xhi), $(ymin))"))
+    push!(ax, Plots.Command("\\draw[$color, line width=2pt] (axis cs: $(xmin-ybar_hw), $(ylo)) -- ($(xmin+ybar_hw), $(ylo))"))
+    push!(ax, Plots.Command("\\draw[$color, line width=2pt] (axis cs: $(xmin-ybar_hw), $(yhi)) -- ($(xmin+ybar_hw), $(yhi))"))
+    push!(ax, Plots.Command("\\draw[$color, line width=2pt] (axis cs: $(xmin), $(ylo)) -- ($(xmin), $(yhi))"))
+    push!(ax, Plots.Command(get_filled_rectangle([xmin, ylo], [xmax, yhi], color, alpha=alpha, draw=draw)))
+    push!(ax, Plots.Command("\\draw[dashed, $cinput, line width=$lwdash] (axis cs: $(xlo), $(ymin)) -- ($(xlo), $(f(xlo)))"))
+    push!(ax, Plots.Command("\\draw[dashed, $cinput, line width=$lwdash] (axis cs: $(xhi), $(ymin)) -- ($(xhi), $(f(xhi)))"))
+    ax.style = "clip=false"
+    return ax
+end
+
+abstract type Agent end
+abstract type Environment end
+abstract type Sensor end
+
+struct System
+    agent::Agent
+    env::Environment
+    sensor::Sensor
+end
+####################
+
+#################### introduction 2
+function step(sys::System, s)
+    o = sys.sensor(s)
+    a = sys.agent(o)
+    s′ = sys.env(s, a)
+    return (; o, a, s′)
+end
+
+function rollout(sys::System; d)
+    s = rand(Ps(sys.env))
+    τ = []
+    for t in 1:d
+        o, a, s′ = step(sys, s)
+        push!(τ, (; s, o, a))
+        s = s′
+    end
+    return τ
+end
+
+struct Disturbance
+    xa # agent disturbance
+    xs # environment disturbance
+    xo # sensor disturbance
+end
+
+struct DisturbanceDistribution
+    Da # agent disturbance distribution
+    Ds # environment disturbance distribution
+    Do # sensor disturbance distribution
+end
+
+function step(sys::System, s, D::DisturbanceDistribution)
+    xo = rand(D.Do(s))
+    o = sys.sensor(s, xo)
+    xa = rand(D.Da(o))
+    a = sys.agent(o, xa)
+    xs = rand(D.Ds(s, a))
+    s′ = sys.env(s, a, xs)
+    x = Disturbance(xa, xs, xo)
+    return (; o, a, s′, x)
+end
+
+struct ProportionalController <: Agent
+    k
+end
+(c::ProportionalController)(s, a=missing) = c.k' * s
+Πo(agent::ProportionalController) = agent.α'
+
+@with_kw struct InvertedPendulum <: Environment
+    m::Float64 = 1.0     # mass of the pendulum
+    l::Float64 = 1.0     # length of the pendulum
+    g::Float64 = 10.0    # acceleration due to gravity
+    dt::Float64 = 0.05   # time step
+    ω_max::Float64 = 8.0 # maximum angular velocity
+    a_max::Float64 = 2.0 # maximum torque
+end
+
+function (env::InvertedPendulum)(s, a, xs=missing)
+    θ, ω = s[1], s[2]
+    dt, g, m, l = env.dt, env.g, env.m, env.l
+    ω = ω + (3g / (2 * l) * sin(θ) + 3 * a / (m * l^2)) * dt
+    θ = θ + ω * dt
+    return [θ, ω]
+end
+
+Ps(env::InvertedPendulum) = Product([Uniform(-π / 16, π / 16), 
+                                     Uniform(-1.0, 1.0)])
+
+struct AdditiveNoiseSensor <: Sensor
+	Do # noise distribution
+end
+
+(sensor::AdditiveNoiseSensor)(s) = sensor(s, rand(Do(sensor, s)))
+(sensor::AdditiveNoiseSensor)(s, x) = s + x
+Do(sensor::AdditiveNoiseSensor, s) = sensor.Do
+Os(sensor::AdditiveNoiseSensor) = I
+
+abstract type ReachabilityAlgorithm end
+
+struct NaturalInclusion <: ReachabilityAlgorithm
+    h # time horizon
+end
+
+function r(sys, x)
+    s, 𝐱 = extract(sys.env, x)
+    τ = rollout(sys, s, 𝐱)
+    return τ[end].s
+end
+
+to_hyperrectangle(𝐈) = Hyperrectangle(low=[i.lo for i in 𝐈], 
+                                      high=[i.hi for i in 𝐈])
+
+function reachable(alg::NaturalInclusion, sys)
+    𝐈′s = []
+    for d in 1:alg.h
+        𝐈 = intervals(sys, d)
+        push!(𝐈′s, r(sys, 𝐈))
+    end
+    return UnionSetArray([to_hyperrectangle(𝐈′) for 𝐈′ in 𝐈′s])
+end
+
+function step(sys::System, s, x)
+    o = sys.sensor(s, x.xo)
+    a = sys.agent(o, x.xa)
+    s′ = sys.env(s, a, x.xs)
+    return (; o, a, s′)
+end
+
+function rollout(sys::System, s, 𝐱; d=length(𝐱))
+    τ = []
+    for t in 1:d
+        x = 𝐱[t]
+        o, a, s′ = step(sys, s, x)
+        push!(τ, (; s, o, a, x))
+        s = s′
+    end
+    return τ
+end
+
+function inv_pendulum_state_space(; failure_threshold = π/4, xmin=-1.2, xmax=1.2, ymin=-1.2, ymax=1.2)
+    ax = Axis(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
+    push!(ax, Plots.Command(get_filled_rectangle([xmin, ymin], [-failure_threshold, ymax], "pastelRed", alpha=0.5)))
+    push!(ax, Plots.Command(get_filled_rectangle([failure_threshold, ymin], [xmax, ymax], "pastelRed", alpha=0.5)))
+    ax.xlabel = L"$\theta$ (rad)"
+    ax.ylabel = L"$\omega$ (rad/s)"
+    return ax
+end
+
+function plot_polytope!(ax, vertices; fill_color="pastelSkyBlue", fill_alpha=1.0, draw_color="black", draw_alpha=1.0, linestyle="solid", linewidth="0.5pt")
+    comm = "\\filldraw[$linestyle, fill=$fill_color, draw=$draw_color, fill opacity=$fill_alpha, draw opacity=$draw_alpha, line width=$linewidth] "
+    for vert in vertices
+        comm *= "($(vert[1]), $(vert[2])) -- "
+    end
+    comm *= "cycle;"
+    push!(ax, Plots.Command(comm))
+end
+
+function plot_polytope!(ax, set::ConvexSet; fill_color="pastelSkyBlue", fill_alpha=1.0, draw_color="black", draw_alpha=1.0, linestyle="solid", linewidth="0.5pt")
+    vertices = LazySets.vertices_list(set)
+    comm = "\\filldraw[$linestyle, fill=$fill_color, draw=$draw_color, fill opacity=$fill_alpha, draw opacity=$draw_alpha, line width=$linewidth] "
+    for vert in vertices
+        comm *= "($(vert[1]), $(vert[2])) -- "
+    end
+    comm *= "cycle;"
+    push!(ax, Plots.Command(comm))
+end
+
+function plot_polytope!(ax, set::Hyperrectangle; fill_color="pastelSkyBlue", fill_alpha=1.0, draw_color="black", draw_alpha=1.0, linestyle="solid", linewidth="0.5pt")
+    vertices = LazySets.vertices_list(set)
+    vertices = [vertices[1], vertices[2], vertices[4], vertices[3]]
+    comm = "\\filldraw[$linestyle, fill=$fill_color, draw=$draw_color, fill opacity=$fill_alpha, draw opacity=$draw_alpha, line width=$linewidth] "
+    for vert in vertices
+        comm *= "($(vert[1]), $(vert[2])) -- "
+    end
+    comm *= "cycle;"
+    push!(ax, Plots.Command(comm))
 end
